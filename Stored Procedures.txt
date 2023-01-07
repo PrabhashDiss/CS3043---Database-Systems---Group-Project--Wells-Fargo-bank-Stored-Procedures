@@ -1,0 +1,184 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AccountAdd`(
+IN _AccountNumber char(10),
+IN _CustomerID char(5),
+IN _BranchCode varchar(4),
+IN _AccountTypeID char(4),
+IN _Balance float(12,2),
+IN _LastActivedate date,
+IN _OpenDate date
+)
+BEGIN
+	INSERT INTO account(account_number, customer_id, branch_code, account_type_id, balance, last_active_date, open_date)
+    VALUES(_AccountNumber, _CustomerID, _BranchCode, _AccountTypeID, _Balance, _LastActiveDate, _OpenDate);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AccountTypeAdd`(
+IN _CustomerID char(5),
+IN _BranchCode varchar(4),
+IN _AccountTypeID char(4), 
+IN _Balance float(12,2), 
+IN _AccountNumber char(10), 
+IN _LastActiveDate date, 
+IN _OpenDate date
+)
+BEGIN
+	INSERT INTO account_type(customer_id, branch_code, account_type_id, balance, account_number, last_active_date, open_date)
+    VALUES(_CustomerID, _BranchCode, _AccountTypeID, _Balance, _AccountNumber, _LastActiveDate, _OpenDate);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `BorrowerAdd`(
+IN _CustomerID char(4),
+IN _LoanNumber char(5)
+)
+BEGIN
+	INSERT INTO borrower(customer_id, loan_number)
+    VALUES(_CustomerID, _LoanNumber);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `BranchAdd`(
+IN _BranchCode varchar(4),
+IN _BranchCity varchar(10),
+IN _Assets int,
+IN _Address varchar(256),
+IN _BranchManager varchar(5)
+)
+BEGIN
+	INSERT INTO branch(branch_code, branch_city, assets, address, branch_manager)
+    VALUES(_BranchCode, _BranchCity, _Assets, _Address, _BranchManager);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `BusinessAdd`(
+IN _Name varchar(256),
+IN _IncorpDate date,
+IN _CustomerID char(4)
+)
+BEGIN
+	INSERT INTO business(name, incorp_date, customer_id)
+    VALUES(_Name, _IncorpDate, _CustomerID);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomerAdd`(
+IN _CustomerID char(4),
+IN _CustomerName varchar(256),
+IN _CustomerCity varchar(256),
+IN _CustomerStreet varchar(256),
+IN _Gender char(1),
+IN _Address varchar(256)
+)
+BEGIN
+	INSERT INTO customer(customer_id, customer_name, customer_city, customer_street, gender, address)
+    VALUES(_CustomerID, _CustomerName, _CustomerCity, _CustomerStreet, _Gender, _Address);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CustomerBranchAdd`(
+IN _CustomerBranchID int,
+IN _CustomerID char(4), 
+IN _BranchCode varchar(4)
+)
+BEGIN
+	INSERT INTO customer_branch(customer_branch_id, customer_id, branch_code)
+    VALUES(_CustomerBranchID, _CustomerID, _BranchCode);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/	
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `EmployeeAdd`(
+IN _EmployeeID varchar(5),
+IN _BranchCode varchar(4),
+IN _EmployeeName varchar(256)
+)
+BEGIN
+	INSERT INTO employee(employee_id, branch_code, employee_name)
+    VALUES(_EmployeeID, _BranchCode, _EmployeeName);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `IndividualAdd`(
+IN _DateOfBirth date,
+IN _FirstName varchar(256),
+IN _LastName varchar(256),
+IN _CustomerID char(4) 
+)
+BEGIN
+	INSERT INTO individual(date_of_birth, first_name, last_name, customer_id)
+    VALUES(_DateOfBirth, _FirstName, _LastName, _CustomerID);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LoanAdd`(
+IN _LoanNumber varchar(12),
+IN _BranchCode varchar(4),
+IN _Amount float(12,2),
+IN _LoanTypeID char(4),
+IN _LoanDuration int,
+IN _InterestRate float(4,2), 
+IN _StartDate date,
+IN _DueDate date, 
+IN _IsPersonal tinyint(1), 
+IN _IsOnline tinyint(1), 
+IN _LoanStatus tinyint(1)
+)
+BEGIN
+	INSERT INTO loan(loan_number, branch_code, amount, loan_type_id, loan_duration, interest_rate, start_date, due_date, is_personal, is_online, loan_status)
+    VALUES(_LoanNumber, _BranchCode, _Amount, _LoanTypeID, _LoanDuration, _InterestRate, _StartDate, _DueDate, _IsPersonal, _IsOnline, _LoanStatus);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LoanPaymentAdd`(
+IN _LoanNumber varchar(12),
+IN _PaymentID int,
+IN _PaymentReferenceNumber char(5),
+IN _PaymentDate date,
+IN _PaymentAmount float,
+IN _ProofOfPayment longblob,
+IN _PaymentStatus int, 
+IN _Remarks varchar(50)
+)
+BEGIN
+	INSERT INTO loan_payment(loan_number, payment_id, payment_reference_number, payment_date, payment_amount, proof_of_payment, payment_status, remarks)
+    VALUES(_LoanNumber, _PaymentID, _PaymentReferenceNumber, _PaymentDate, _PaymentAmount, _ProofOfPayment, _PaymentStatus, _Remarks);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LoanTypeAdd`(
+IN _LoanTypeID char(4),
+IN _BaseAmount decimal(10,3),
+IN _InterestRate decimal(10,3),
+IN _Type varchar(50),
+IN _Description varchar(100)
+)
+BEGIN
+	INSERT INTO loan_type(loan_type_id, base_amount, interest_rate, type, description)
+    VALUES(_LoanTypeID, _BaseAmount, _InterestRate, _Type, _Description);
+END
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TransactionAdd`(
+IN _TransactionID char(4),
+IN _AccountNumber char(10),
+IN _TransactionDescription varchar(256),
+IN _Amount float(12,2),
+IN _ExecutionBranchCode varchar(4),
+IN _TransactionTimestamp timestamp
+)
+BEGIN
+	INSERT INTO transaction(transaction_id, account_number, transaction_description, amount, execution_branch_code, transaction_timestamp)
+    VALUES(_TransactionID, _AccountNumber, _TransactionDescription, _Amount, _ExecutionBranchCode, _TransactionTimestamp);
+END
